@@ -1,0 +1,4 @@
+5 - 
+    Realice un sistema que entrene 525 épocas y que prediga el valor de Y para un 
+    valor x = 50 para la formula Y = 2X + 5 , ingresando para el entrenamiento 15 valores de pruebas 
+	comenzando por -4,  mostrando en pantalla el valor predicho de Y. Grafique la función de perdida.

@@ -1,0 +1,3 @@
+6 - 
+    Crear la bandera de Francia con tensores de pixeles un canvas de mínimo 25 px de alto. Luego aumentar al doble de tamaño. 
+    Luego, invertirlo. Mostrando por pantalla la cantidad de bytes que consumen los tensores para cada caso.

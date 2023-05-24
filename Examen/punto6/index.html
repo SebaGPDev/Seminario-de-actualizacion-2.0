@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TODO supply a title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
+</head>
+
+<body>
+    <div id="div" src=""></div>
+    <canvas id="cuadrado"></canvas>
+    <canvas id="cuadradoDoble"></canvas>
+    <canvas id="cuadradoInvertido"></canvas>
+    <div id="memoryStats"></div>
+
+
+    <script>
+        const blue = [0, 38, 84];
+        const white = [255, 255, 255];
+        const red = [237, 41, 57];
+
+        const cuadrado = tf.tensor([
+            [
+                [0, 38, 84],
+                [0, 38, 84],
+                [0, 38, 84],
+                [255, 255, 255],
+                [255, 255, 255],
+                [255, 255, 255],
+                [237, 41, 57],
+                [237, 41, 57],
+                [237, 41, 57],
+            ],
+        ], null, 'int32');
+
+        const cuadradoInvertido = tf.tensor([
+            [
+                [237, 41, 57],
+                [237, 41, 57],
+                [237, 41, 57],
+                [255, 255, 255],
+                [255, 255, 255],
+                [255, 255, 255],
+                [0, 38, 84],
+                [0, 38, 84],
+                [0, 38, 84],
+            ],
+        ], null, 'int32');
+
+        const cuadradoNormalized = cuadrado.div(255);
+        const cuadradoNormalized2 = cuadradoInvertido.div(255);
+
+        const resizedCuadrado = tf.image.resizeBilinear(cuadradoNormalized, [50, 50]);
+        const resizedCuadraInvertido = tf.image.resizeBilinear(cuadradoNormalized2, [100, 100]);
+
+        const canvasCuadrado = document.getElementById("cuadrado");
+        tf.browser.toPixels(resizedCuadrado, canvasCuadrado).then(() => {
+            resizedCuadrado.dispose(); // Limpiar la imagen redimensionada
+            cuadrado.dispose(); // Limpiar el tensor original
+            console.log(tf.memory().numBytes);
+        });
+
+        // Crear el doble de tamaño
+        const resizedCuadradoDoble = tf.image.resizeBilinear(cuadradoNormalized, [100, 100]);
+        const resizedCuadradoDobleInvertido = tf.image.resizeBilinear(resizedCuadraInvertido, [100, 100]);
+
+
+        // Invertir cuadrado
+
+
+        // Añadir al canvas
+        const canvasCuadradoDoble = document.getElementById("cuadradoDoble");
+        const canvasCuadradoDobleInvertido = document.getElementById("cuadradoInvertido");
+
+        
+
+        function updateMemoryStats() {
+            const memoryStats = document.getElementById("memoryStats");
+            const numBytes = tf.memory().numBytes;
+            memoryStats.textContent = "Memoria utilizada: " + numBytes + " bytes";
+        }
+
+        tf.browser.toPixels(resizedCuadradoDoble, canvasCuadradoDoble).then(() => {
+            resizedCuadradoDoble.dispose(); // Limpiar la imagen redimensionada
+            cuadradoNormalized.dispose(); // Limpiar el tensor normalizado
+            console.log(tf.memory().numBytes);
+        });
+        tf.browser.toPixels(resizedCuadradoDobleInvertido, canvasCuadradoDobleInvertido).then(() => {
+            resizedCuadradoDoble.dispose(); // Limpiar la imagen redimensionada
+            cuadradoNormalized.dispose(); // Limpiar el tensor normalizado
+            console.log(tf.memory().numBytes);
+        });
+    </script>
+</body>
+
+</html>

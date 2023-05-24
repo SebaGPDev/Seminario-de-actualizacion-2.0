@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TensorFlow.js</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.5.1/dist/tfjs-vis.umd.min.js"></script>
+</head>
+
+<body>
+    <h1>TensorFlow.js</h1>
+
+    <p>Valor predicho de Y para x = 50: <span id="predicted-value"></span></p>
+
+    <div id="loss-container"></div>
+
+    <script>
+        // Crear un array con los valores de entrada (X) y los valores de salida (Y)
+        const xValues = [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        const yValues = xValues.map(x => 2 * x + 5);
+
+        // Convertir los datos a tensores de TensorFlow.js
+        const xs = tf.tensor1d(xValues);
+        const ys = tf.tensor1d(yValues);
+
+        // Crear un modelo secuencial
+        const model = tf.sequential();
+        model.add(tf.layers.dense({ units: 1, inputShape: [1] }));
+
+        // Compilar el modelo
+        model.compile({ loss: 'meanSquaredError', optimizer: 'sgd' });
+
+        // Configurar la visualización de TensorBoard
+        const lossContainer = document.getElementById('loss-container');
+        const logs = tfvis.show.fitCallbacks(lossContainer, ['loss']);
+
+        // Entrenar el modelo
+        const epochs = 525;
+        model.fit(xs, ys, {
+            epochs: epochs,
+            callbacks: logs
+        }).then(() => {
+            // Realizar la predicción para el valor x = 50
+            const input = tf.tensor2d([50], [1, 1]);
+            const output = model.predict(input);
+            const predictedValue = output.dataSync()[0];
+
+            const predictedValueElement = document.getElementById('predicted-value');
+            predictedValueElement.textContent = predictedValue.toString();
+        });
+    </script>
+</body>
+
+</html>

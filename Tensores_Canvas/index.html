@@ -14,6 +14,7 @@
     <div id="div" src=""></div>
     <canvas id="cuadrado"></canvas>
 
+    <div id="memoryStats"></div>
 
     <script>
 
@@ -147,11 +148,13 @@
         const cuadradoNormalized = cuadrado.div(255);
         const resizedCuadrado = tf.image.resizeBilinear(cuadradoNormalized, [50, 50]);
         const canvasCuadrado = document.getElementById("cuadrado");
+
+        
         tf.browser.toPixels(resizedCuadrado, canvasCuadrado).then(() => {
             resizedCuadrado.dispose(); // Limpiar la imagen redimensionada
             cuadrado.dispose(); // Limpiar el tensor original
             console.log(tf.memory().numBytes);
-          });
+        });
     </script>
 </body>
 
